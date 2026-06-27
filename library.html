@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Library</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<header class="topbar">
+<a href="courses.html" class="back-btn">
+<i class="fa-solid fa-arrow-left"></i> Back
+</a>
+<h2>My Library (Drafts)</h2>
+</header>
+
+
+<section class="library">
+
+<div id="draftList"></div>
+<div id="postsContainer"></div>
+
+</section>
+
+<script>
+let drafts = JSON.parse(localStorage.getItem("drafts")) || [];
+let container = document.getElementById("draftList");
+
+function loadDrafts() {
+
+    container.innerHTML = "";
+
+    if (drafts.length === 0) {
+        container.innerHTML = "<p>No drafts yet.</p>";
+        return;
+    }
+
+    drafts.forEach((item, index) => {
+
+        container.innerHTML += `
+        <div class="library-card">
+            <div class="content">${item.content}</div>
+
+            <small>${item.date}</small>
+
+            <div class="lib-buttons">
+
+                <button onclick="editDraft(${index})">
+                    <i class="fa-solid fa-pen"></i> Edit
+                </button>
+
+                <button onclick="deleteDraft(${index})">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </button>
+
+            </div>
+        </div>
+        `;
+    });
+}
+
+function deleteDraft(index){
+    drafts.splice(index, 1);
+    localStorage.setItem("drafts", JSON.stringify(drafts));
+    loadDrafts();
+}
+
+function editDraft(index){
+    localStorage.setItem("editDraft", JSON.stringify(drafts[index]));
+    window.location.href = "write.html";
+}
+
+loadDrafts();
+</script>
+
+
+</body>
+</html>

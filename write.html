@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Write | Kathalata</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+    <select id="section">
+    <option value="poetry">Poetry</option>
+    <option value="prose">Prose</option>
+    <option value="essays">Essays</option>
+</select>
+
+<div id="editor" contenteditable="true"></div>
+
+<button onclick="publishWork()">Publish</button>
+
+<!-- TOP BAR -->
+<header class="topbar">
+
+<a href="courses.html" class="back-btn">
+<i class="fa-solid fa-arrow-left"></i> Back
+</a>
+
+<h2>Write Your Story</h2>
+
+</header>
+
+<!-- EDITOR -->
+<section class="write-container">
+
+<div class="editor-box">
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+
+<button onclick="document.execCommand('bold')"><b>B</b></button>
+
+<button onclick="document.execCommand('italic')"><i>I</i></button>
+
+<button onclick="document.execCommand('underline')"><u>U</u></button>
+
+<input type="file">
+
+</div>
+
+<!-- EDITABLE AREA -->
+<div class="editor" contenteditable="true">
+
+Start writing your masterpiece here...
+
+</div>
+
+<!-- ACTION BUTTONS -->
+<div class="action-buttons">
+
+<button class="draft-btn">
+<i class="fa-solid fa-floppy-disk"></i> Save Draft
+</button>
+
+<button class="publish-btn">
+<i class="fa-solid fa-upload"></i> Publish
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+const editor = document.querySelector(".editor");
+const draftBtn = document.querySelector(".draft-btn");
+const publishBtn = document.querySelector(".publish-btn");
+
+// SAVE DRAFT
+draftBtn.addEventListener("click", () => {
+
+    const content = editor.innerHTML.trim();
+
+    if (content === "" || content === "Start writing your masterpiece here...") {
+        alert("Please write something first.");
+        return;
+    }
+
+    let drafts = JSON.parse(localStorage.getItem("drafts")) || [];
+
+    drafts.push({
+        id: Date.now(),
+        content: content,
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("drafts", JSON.stringify(drafts));
+
+    alert("Work saved to drafts!");
+
+    window.location.href = "library.html";
+});
+
+
+// PUBLISH
+publishBtn.addEventListener("click", () => {
+
+    const content = editor.innerHTML.trim();
+
+    if (content === "" || content === "Start writing your masterpiece here...") {
+        alert("Please write something first.");
+        return;
+    }
+
+    let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+    posts.push({
+        id: Date.now(),
+        content: content,
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("posts", JSON.stringify(posts));
+
+    alert("Work published successfully!");
+
+    window.location.href = "section.html";
+});
+</script>
+<script>
+function publishWork() {
+    const content = document.getElementById("editor").innerHTML;
+    const section = document.getElementById("section").value;
+
+    if (!content.trim()) {
+        alert("Write something first");
+        return;
+    }
+
+    let posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+    posts.push({
+        id: Date.now(),
+        section: section,
+        content: content,
+        likes: 0,
+        comments: []
+    });
+
+    localStorage.setItem("posts", JSON.stringify(posts));
+
+    alert("Published successfully!");
+    window.location.href = "courses.html";
+}
+</script>
+
+</body>
+</html>
